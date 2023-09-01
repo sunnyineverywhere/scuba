@@ -1,35 +1,9 @@
-/*
 package main
 
 import (
-	"context"
 	"fmt"
+	"scuba/client"
 
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/client"
-)
-
-func main() {
-	cli, err := client.NewClientWithOpts(client.FromEnv)
-	if err != nil {
-		panic(err)
-	}
-
-	containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
-	if err != nil {
-		panic(err)
-	}
-
-	for _, container := range containers {
-		fmt.Printf("%s %s\n", container.ID[:10], container.Image)
-	}
-}
-
-*/
-
-package main
-
-import (
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -38,8 +12,15 @@ func main() {
 	app := fiber.New()
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello world!")
+		containers := client.GetContainers()
+		for _, container := range containers {
+			fmt.Println("Container ID:", container["Id"])
+			fmt.Println("Container Name:", container["Names"])
+			fmt.Println("Container Image:", container["Image"])
+		}
+		return c.JSON(containers)
 	})
 
+	
 	app.Listen(":8989")
 }

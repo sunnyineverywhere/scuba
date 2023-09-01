@@ -2,8 +2,6 @@ module scuba
 
 go 1.20
 
-require github.com/docker/docker v24.0.5+incompatible
-
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/google/uuid v1.3.1 // indirect
