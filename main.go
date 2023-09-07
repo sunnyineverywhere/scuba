@@ -15,6 +15,11 @@ func main() {
 		return c.JSON(containers)
 	})
 
-	app.Static("/", "./pages")
+	app.Get("/images", func(c *fiber.Ctx) error {
+		images := client.GetDockerImages()
+		return c.JSON(images)
+	})
+
+	// app.Static("/", "./pages")
 	app.Listen(":8989")
 }
