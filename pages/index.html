@@ -57,6 +57,27 @@
           </div>
         </div>
       </nav>
+      <div class="flex items-center justify-center h-screen">
+        <table
+          class="table-auto border-collapse border border-gray-500"
+          id="container-info-table"
+        >
+          <thead>
+            <tr>
+              <th class="px-4 py-2 bg-gray-200 border border-gray-400">ID</th>
+              <th class="px-4 py-2 bg-gray-200 border border-gray-400">
+                Image ID
+              </th>
+              <th class="px-4 py-2 bg-gray-200 border border-gray-400">
+                Image
+              </th>
+            </tr>
+          </thead>
+          <tbody id="container-info-body">
+            <!-- 테이블 내용은 자바스크립트로 동적으로 생성됩니다. -->
+          </tbody>
+        </table>
+      </div>
       <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 relative">
         <!-- Dropdown 버튼 -->
         <div class="relative inline-block text-right mb-4">
@@ -91,22 +112,56 @@
           </div>
         </div>
 
-        <ul>
-          <!-- 게시글 아이템을 리스트로 표시합니다. -->
-          <li class="mb-2">
-            <a href="#" class="text-blue-500 hover:underline">게시글 제목 1</a>
-            <p class="text-gray-600">게시글 내용 1</p>
-          </li>
-          <li class="mb-2">
-            <a href="#" class="text-blue-500 hover:underline">게시글 제목 2</a>
-            <p class="text-gray-600">게시글 내용 2</p>
-          </li>
-          <li class="mb-2">
-            <a href="#" class="text-blue-500 hover:underline">게시글 제목 3</a>
-            <p class="text-gray-600">게시글 내용 3</p>
-          </li>
-          <!-- 필요한 만큼 게시글 아이템을 추가할 수 있습니다. -->
-        </ul>
+        <script>
+          const maxLength = 10; // 최대 길이 설정
+          const ellipsis = "..."; // 추가 문자열 설정
+
+          // ID를 최대 길이까지 자르는 함수
+          function truncateId(id) {
+            if (id.length <= maxLength) {
+              return id;
+            } else {
+              return id.slice(0, maxLength) + ellipsis;
+            }
+          }
+
+          let containerData;
+          const containerInfoTable = document.getElementById(
+            "container-info-table"
+          );
+
+          fetch("/containers")
+            .then((response) => response.json()) // JSON 데이터를 파싱
+            .then((data) => {
+              containerData = data;
+
+              // 데이터 확인용
+              console.log(containerData);
+
+              // 데이터를 가져온 후에 처리
+              containerData.forEach((c) => {
+                console.log(c.Id);
+
+                const row = document.createElement("tr");
+                const idCell = document.createElement("td");
+                const imageIDCell = document.createElement("td");
+                const imageCell = document.createElement("td");
+
+                idCell.textContent = truncateId(c.Id);
+                imageIDCell.textContent = c.ImageID;
+                imageCell.textContent = c.Image;
+
+                row.appendChild(idCell);
+                row.appendChild(imageIDCell);
+                row.appendChild(imageCell);
+
+                containerInfoTable.appendChild(row);
+              });
+            })
+            .catch((error) => {
+              console.error("데이터를 가져오는 중 오류 발생:", error);
+            });
+        </script>
       </div>
     </div>
     <script>

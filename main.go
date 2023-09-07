@@ -20,6 +20,6 @@ func main() {
 		return c.JSON(images)
 	})
 
-	// app.Static("/", "./pages")
+	app.Static("/", "./pages")
 	app.Listen(":8989")
 }
